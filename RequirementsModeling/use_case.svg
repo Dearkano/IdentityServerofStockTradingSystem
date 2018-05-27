@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- 由 Microsoft Visio, SVG Export 生成 用例图.svg Page-1 -->
+<!-- 由 Microsoft Visio, SVG Export 生成 use_case.svg 页-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
-		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="11.6929in" height="8.26772in"
-		viewBox="0 0 841.89 595.276" xml:space="preserve" color-interpolation-filters="sRGB" class="st8">
-	<v:documentProperties v:langID="2052" v:metric="true" v:viewMarkup="false">
-		<v:userDefs>
-			<v:ud v:nameU="msvNoAutoConnect" v:prompt="" v:val="VT0(0):26"/>
-		</v:userDefs>
-	</v:documentProperties>
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.30933in" height="9.41236in"
+		viewBox="0 0 526.272 677.69" xml:space="preserve" color-interpolation-filters="sRGB" class="st8">
+	<v:documentProperties v:langID="2052" v:metric="true" v:viewMarkup="false"/>
 
 	<style type="text/css">
 	<![CDATA[
@@ -35,15 +31,12 @@
 		</linearGradient>
 	</defs>
 	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
-		<v:userDefs>
-			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
-		</v:userDefs>
 		<title>页-1</title>
 		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
 				v:shadowOffsetY="-8.50394"/>
 		<v:layer v:name="容器" v:index="0"/>
 		<v:layer v:name="连接线" v:index="1"/>
-		<g id="group2-1" transform="translate(279.213,-5.45399)" v:mID="2" v:groupContext="group" v:layerMember="0">
+		<g id="group2-1" transform="translate(108.955,-2.83465)" v:mID="2" v:groupContext="group" v:layerMember="0">
 			<v:userDefs>
 				<v:ud v:nameU="msvShapeCategories" v:prompt="" v:val="VT0(0):26"/>
 				<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Container)"/>
@@ -73,7 +66,6 @@
 				<v:ud v:nameU="LineColor" v:prompt="" v:val="VT5(#d5d5d5)"/>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 				<v:ud v:nameU="BaseColor" v:prompt="" v:val="VT5(#ffffff)"/>
-				<v:ud v:nameU="LineColor" v:prompt="" v:val="VT5(#d5d5d5)"/>
 			</v:userDefs>
 			<title>子系统</title>
 			<g id="group3-2" v:mID="3" v:groupContext="group" v:layerMember="0">
@@ -112,10 +104,10 @@
 					</v:userDefs>
 				</g>
 				<g id="shape3-5" v:mID="3" v:groupContext="groupContent" v:layerMember="0">
-					<path d="M0 595.28 L155.91 595.28 L311.81 595.28 L311.81 11.64 L155.91 11.64 L0 11.64 L0 595.28 Z" class="st1"/>
+					<path d="M0 677.69 L155.91 677.69 L311.81 677.69 L311.81 3.08 L155.91 3.08 L0 3.08 L0 677.69 Z" class="st1"/>
 				</g>
 			</g>
-			<g id="group5-7" transform="translate(0,-562.373)" v:mID="5" v:groupContext="group" v:layerMember="0">
+			<g id="group5-7" transform="translate(0,-653.345)" v:mID="5" v:groupContext="group" v:layerMember="0">
 				<v:userDefs>
 					<v:ud v:nameU="msvStructureType" v:prompt="" v:val="VT4(Heading)"/>
 					<v:ud v:nameU="CStyle" v:prompt="" v:val="VT0(1):26"/>
@@ -188,159 +180,200 @@
 				</g>
 				<g id="shape5-12" v:mID="5" v:groupContext="groupContent" v:layerMember="0">
 					<v:textBlock v:margins="rect(4,6,4,6)" v:tabSpace="42.5197"/>
-					<v:textRect cx="155.906" cy="584.646" width="311.82" height="21.2598"/>
-					<text x="6" y="587.65" class="st2" v:langID="2052"><v:paragraph/><v:tabList/>账户业务子系统</text>				</g>
+					<v:textRect cx="155.906" cy="667.06" width="311.82" height="21.2598"/>
+					<text x="6" y="670.06" class="st2" v:langID="2052"><v:paragraph/><v:tabList/>账户业务子系统</text>				</g>
 			</g>
 		</g>
-		<g id="shape7-17" v:mID="7" v:groupContext="shape" transform="translate(654.52,-333.536)">
+		<g id="shape7-17" v:mID="7" v:groupContext="shape" transform="translate(484.262,-416.103)">
 			<title>参与者</title>
 			<desc>投资者</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="17.0079" cy="606.477" width="50.01" height="22.4037"/>
-			<path d="M6.8 595.28 L6.8 564.87 L6.8 577.03 L0 577.03 L0 552.71 L3.4 549.66 L30.61 549.66 L34.02 552.71 L34.02 577.03
-						 L27.21 577.03 L27.21 564.87 L27.21 595.28 L17.01 595.28 L17.01 570.95 L17.01 595.28 L6.8 595.28 ZM23.09
-						 540.54 A6.08147 6.08147 -180 1 0 10.93 540.54 A6.08147 6.08147 -180 1 0 23.09 540.54 Z" class="st3"/>
-			<text x="-0.99" y="610.08" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>投资者</text>		</g>
-		<g id="shape8-20" v:mID="8" v:groupContext="shape" transform="translate(290.268,-529.512)">
+			<v:textRect cx="17.0079" cy="688.891" width="50.01" height="22.4037"/>
+			<path d="M6.8 677.69 L6.8 647.28 L6.8 659.45 L0 659.45 L0 635.12 L3.4 632.08 L30.61 632.08 L34.02 635.12 L34.02 659.45
+						 L27.21 659.45 L27.21 647.28 L27.21 677.69 L17.01 677.69 L17.01 653.36 L17.01 677.69 L6.8 677.69 ZM23.09
+						 622.96 A6.08147 6.08147 -180 1 0 10.93 622.96 A6.08147 6.08147 -180 1 0 23.09 622.96 Z" class="st3"/>
+			<text x="-0.99" y="692.49" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>投资者</text>		</g>
+		<g id="shape8-20" v:mID="8" v:groupContext="shape" transform="translate(120.01,-618.485)">
 			<title>用例</title>
 			<desc>开设证券账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="56.6929" cy="580.68" width="113.39" height="29.191"/>
-			<ellipse cx="56.6929" cy="580.68" rx="56.6929" ry="14.5955" class="st5"/>
-			<text x="20.69" y="584.28" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>开设证券账户</text>		</g>
-		<g id="shape9-23" v:mID="9" v:groupContext="shape" transform="translate(290.268,-431.524)">
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="20.69" y="666.69" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>开设证券账户</text>		</g>
+		<g id="shape9-23" v:mID="9" v:groupContext="shape" transform="translate(120.01,-517.294)">
 			<title>用例.9</title>
 			<desc>挂失、补办证券账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="61.0023" cy="580.68" width="122.01" height="29.191"/>
-			<ellipse cx="61.0023" cy="580.68" rx="61.0023" ry="14.5955" class="st5"/>
-			<text x="7" y="584.28" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>挂失、补办证券账户</text>		</g>
-		<g id="shape10-26" v:mID="10" v:groupContext="shape" transform="translate(290.268,-333.536)">
+			<v:textRect cx="61.0023" cy="663.094" width="122.01" height="29.191"/>
+			<ellipse cx="61.0023" cy="663.094" rx="61.0023" ry="14.5955" class="st5"/>
+			<text x="7" y="666.69" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>挂失、补办证券账户</text>		</g>
+		<g id="shape10-26" v:mID="10" v:groupContext="shape" transform="translate(120.01,-416.103)">
 			<title>用例.10</title>
 			<desc>注销证券账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="56.6929" cy="580.68" width="113.39" height="29.191"/>
-			<ellipse cx="56.6929" cy="580.68" rx="56.6929" ry="14.5955" class="st5"/>
-			<text x="20.69" y="584.67" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>注销证券账户</text>		</g>
-		<g id="shape11-29" v:mID="11" v:groupContext="shape" transform="translate(290.268,-235.548)">
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="20.69" y="667.09" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>注销证券账户</text>		</g>
+		<g id="shape11-29" v:mID="11" v:groupContext="shape" transform="translate(120.01,-314.912)">
 			<title>用例.11</title>
 			<desc>开设资金账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="56.6929" cy="580.68" width="113.39" height="29.191"/>
-			<ellipse cx="56.6929" cy="580.68" rx="56.6929" ry="14.5955" class="st5"/>
-			<text x="20.69" y="584.28" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>开设资金账户</text>		</g>
-		<g id="shape12-32" v:mID="12" v:groupContext="shape" transform="translate(290.268,-137.561)">
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="20.69" y="666.69" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>开设资金账户</text>		</g>
+		<g id="shape12-32" v:mID="12" v:groupContext="shape" transform="translate(120.01,-213.721)">
 			<title>用例.12</title>
 			<desc>挂失、补办资金账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="61.0023" cy="580.68" width="122.01" height="29.191"/>
-			<ellipse cx="61.0023" cy="580.68" rx="61.0023" ry="14.5955" class="st5"/>
-			<text x="7" y="584.28" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>挂失、补办资金账户</text>		</g>
-		<g id="shape13-35" v:mID="13" v:groupContext="shape" transform="translate(290.268,-14.1353)">
+			<v:textRect cx="61.0023" cy="663.094" width="122.01" height="29.191"/>
+			<ellipse cx="61.0023" cy="663.094" rx="61.0023" ry="14.5955" class="st5"/>
+			<text x="7" y="666.69" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>挂失、补办资金账户</text>		</g>
+		<g id="shape13-35" v:mID="13" v:groupContext="shape" transform="translate(120.01,-11.3386)">
 			<title>用例.13</title>
 			<desc>资金账户销户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="56.6929" cy="580.68" width="113.39" height="29.191"/>
-			<ellipse cx="56.6929" cy="580.68" rx="56.6929" ry="14.5955" class="st5"/>
-			<text x="20.69" y="584.67" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>资金账户销户</text>		</g>
-		<g id="shape14-38" v:mID="14" v:groupContext="shape" transform="translate(460.515,-235.548)">
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="20.69" y="667.09" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>资金账户销户</text>		</g>
+		<g id="shape14-38" v:mID="14" v:groupContext="shape" transform="translate(290.257,-314.912)">
 			<title>用例.14</title>
 			<desc>查询资金账户</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="56.6929" cy="580.68" width="113.39" height="29.191"/>
-			<ellipse cx="56.6929" cy="580.68" rx="56.6929" ry="14.5955" class="st5"/>
-			<text x="20.69" y="584.67" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>查询资金账户</text>		</g>
-		<g id="shape15-41" v:mID="15" v:groupContext="shape" transform="translate(184.252,-317.724)">
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="20.69" y="667.09" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>查询资金账户</text>		</g>
+		<g id="shape15-41" v:mID="15" v:groupContext="shape" transform="translate(13.9942,-400.291)">
 			<title>参与者.15</title>
 			<desc>工作人员</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
-			<v:textRect cx="17.0079" cy="606.477" width="62.01" height="22.4037"/>
-			<path d="M6.8 595.28 L6.8 564.87 L6.8 577.03 L0 577.03 L0 552.71 L3.4 549.66 L30.61 549.66 L34.02 552.71 L34.02 577.03
-						 L27.21 577.03 L27.21 564.87 L27.21 595.28 L17.01 595.28 L17.01 570.95 L17.01 595.28 L6.8 595.28 ZM23.09
-						 540.54 A6.08147 6.08147 -180 1 0 10.93 540.54 A6.08147 6.08147 -180 1 0 23.09 540.54 Z" class="st3"/>
-			<text x="-6.99" y="610.08" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>工作人员</text>		</g>
-		<g id="shape16-44" v:mID="16" v:groupContext="shape" v:layerMember="1" transform="translate(212.563,-363.335)">
+			<v:textRect cx="17.0079" cy="688.891" width="62.01" height="22.4037"/>
+			<path d="M6.8 677.69 L6.8 647.28 L6.8 659.45 L0 659.45 L0 635.12 L3.4 632.08 L30.61 632.08 L34.02 635.12 L34.02 659.45
+						 L27.21 659.45 L27.21 647.28 L27.21 677.69 L17.01 677.69 L17.01 653.36 L17.01 677.69 L6.8 677.69 ZM23.09
+						 622.96 A6.08147 6.08147 -180 1 0 10.93 622.96 A6.08147 6.08147 -180 1 0 23.09 622.96 Z" class="st3"/>
+			<text x="-6.99" y="692.49" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>工作人员</text>		</g>
+		<g id="shape16-44" v:mID="16" v:groupContext="shape" v:layerMember="1" transform="translate(41.9476,-445.902)">
 			<title>关联</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L123.74 428.84" class="st7"/>
+			<path d="M0 677.69 L124.42 504.86" class="st7"/>
 		</g>
-		<g id="shape17-47" v:mID="17" v:groupContext="shape" v:layerMember="1" transform="translate(218.268,-355.218)">
+		<g id="shape17-47" v:mID="17" v:groupContext="shape" v:layerMember="1" transform="translate(48.0099,-423.612)">
 			<title>关联.17</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 602.36 L72 602.36" class="st7"/>
+			<path d="M0 670.6 L72 670.6" class="st7"/>
 		</g>
-		<g id="shape18-50" v:mID="18" v:groupContext="shape" v:layerMember="1" transform="translate(218.268,-336.693)">
+		<g id="shape18-50" v:mID="18" v:groupContext="shape" v:layerMember="1" transform="translate(48.0099,-418.886)">
 			<title>关联.18</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L108.42 668.19" class="st7"/>
+			<path d="M0 677.69 L108.99 753.38" class="st7"/>
 		</g>
-		<g id="shape19-53" v:mID="19" v:groupContext="shape" v:layerMember="1" transform="translate(211.465,-334.8)">
+		<g id="shape19-53" v:mID="19" v:groupContext="shape" v:layerMember="1" transform="translate(41.2068,-416.931)">
 			<title>关联.19</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L128.82 763.56" class="st7"/>
+			<path d="M0 677.69 L129.15 851.93" class="st7"/>
 		</g>
-		<g id="shape20-56" v:mID="20" v:groupContext="shape" v:layerMember="1" transform="translate(211.465,-325.761)">
+		<g id="shape20-56" v:mID="20" v:groupContext="shape" v:layerMember="1" transform="translate(41.2068,-402.349)">
 			<title>关联.20</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L128.88 877.81" class="st7"/>
+			<path d="M0 677.69 L130.26 1039.57" class="st7"/>
 		</g>
-		<g id="shape22-59" v:mID="22" v:groupContext="shape" v:layerMember="1" transform="translate(218.268,-359.241)">
+		<g id="shape22-59" v:mID="22" v:groupContext="shape" v:layerMember="1" transform="translate(48.0099,-442.171)">
 			<title>关联.22</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L112.02 522.1" class="st7"/>
+			<path d="M0 677.69 L112.61 601.73" class="st7"/>
 		</g>
-		<g id="shape23-62" v:mID="23" v:groupContext="shape" v:layerMember="1" transform="translate(380.515,-261.908)">
+		<g id="shape23-62" v:mID="23" v:groupContext="shape" v:layerMember="1" transform="translate(209.651,-341.385)">
 			<title>关联.23</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L274.01 499.2" class="st7"/>
+			<path d="M0 677.69 L274.61 578.7" class="st7"/>
 		</g>
-		<g id="shape24-65" v:mID="24" v:groupContext="shape" v:layerMember="1" transform="translate(535.894,-263.924)">
+		<g id="shape24-65" v:mID="24" v:groupContext="shape" v:layerMember="1" transform="translate(365.179,-343.328)">
 			<title>关联.24</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<path d="M0 595.28 L119.14 507.42" class="st7"/>
+			<path d="M0 677.69 L120.05 586.67" class="st7"/>
+		</g>
+		<g id="shape1000-68" v:mID="1000" v:groupContext="shape" transform="translate(120.01,-112.53)">
+			<title>用例.1000</title>
+			<desc>添加和取出资金</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="14.69" y="667.09" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>添加和取出资金</text>		</g>
+		<g id="shape1001-71" v:mID="1001" v:groupContext="shape" transform="translate(290.257,-213.721)">
+			<title>用例.1001</title>
+			<desc>修改资金账户密码</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="56.6929" cy="663.094" width="113.39" height="29.191"/>
+			<ellipse cx="56.6929" cy="663.094" rx="56.6929" ry="14.5955" class="st5"/>
+			<text x="8.69" y="667.09" class="st6" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>修改资金账户密码</text>		</g>
+		<g id="shape1002-74" v:mID="1002" v:groupContext="shape" v:layerMember="1" transform="translate(41.2068,-409.436)">
+			<title>关联.1002</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 677.69 L128.54 945.52" class="st7"/>
+		</g>
+		<g id="shape1003-77" v:mID="1003" v:groupContext="shape" v:layerMember="1" transform="translate(48.0099,-419.804)">
+			<title>关联.1003</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 677.69 L277.8 855.63" class="st7"/>
+		</g>
+		<g id="shape1004-80" v:mID="1004" v:groupContext="shape" v:layerMember="1" transform="translate(491.065,-432.082)">
+			<title>关联.1004</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<path d="M0 677.69 L-133.96 867.1" class="st7"/>
 		</g>
 	</g>
 </svg>
