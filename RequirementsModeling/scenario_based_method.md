@@ -260,4 +260,4 @@
 
 ### 3.2 用例图
 
-![用例图](../use_case.svg)
+![用例图](../RequirementsModeling/use_case.svg)
