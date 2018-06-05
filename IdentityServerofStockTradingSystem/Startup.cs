@@ -30,8 +30,8 @@ namespace IdentityServerofSystemTradingSystem
         {
             services.AddDbContext<Data.MyDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DB"));
-                //options.UseSqlServer("Data Source=DESKTOP-N6Q249U;Initial Catalog=Library;Integrated Security=True;Pooling=False");    
+                //options.UseSqlServer(Configuration.GetConnectionString("DB"));
+                options.UseMySql(Configuration.GetConnectionString("DB"));
             });
             services.AddCors(options =>
             {
