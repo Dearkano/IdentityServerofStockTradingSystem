@@ -31,7 +31,8 @@ namespace IdentityServerofSystemTradingSystem
             services.AddDbContext<Data.MyDbContext>(options =>
             {
                 //options.UseSqlServer(Configuration.GetConnectionString("DB"));
-                options.UseMySql(Configuration.GetConnectionString("DB"));
+                //options.UseMySql(Configuration.GetConnectionString("mysqlCon"));
+                options.UseMySql("Data Source=111.231.75.113,3306;Initial Catalog=zju;User ID=zju;Password=123456;");
             });
             services.AddCors(options =>
             {

@@ -13,13 +13,8 @@ namespace IdentityServerofSystemTradingSystem.Data
     {
 
     }
+        //数据库表声明
+     public DbSet<Account> Accounts { get; set; }
 
-    // public DbSet<Book> Books { get; set; }
-
-    // public DbSet<Card> Cards { get; set; }
-
-    //public DbSet<Record> Records { get; set; }
-
-    //  public DbSet<Authorization> Authorizations { get; set; }
 }
 }
