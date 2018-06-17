@@ -113,7 +113,13 @@ namespace IdentityServerofStockTradingSystem.Data
         [Column("stock_code")]
         public string StockCode { get; set; }
 
-        [Column("shares_num")]
-        public decimal SharesNum { get; set; }
+        [Column("available_shares_num")]
+        public int SharesNum { get; set; }
+
+        [Column("unavailable_shares_num")]
+        public int UnavailableSharesNum { get; set; }
+
+        [Column("average_cost")]
+        public decimal AverageCost { get; set; }
     }
 }
