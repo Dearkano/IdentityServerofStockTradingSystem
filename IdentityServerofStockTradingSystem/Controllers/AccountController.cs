@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServerofSystemTradingSystem.Data;
+using IdentityServerofStockTradingSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServerofSystemTradingSystem.Controllers
+namespace IdentityServerofStockTradingSystem.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController:Controller
