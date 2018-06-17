@@ -35,5 +35,13 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var data = await(from account in accounts  select account).ToArrayAsync();
             return data;
         }
+
+        [HttpGet("admin")]
+        public async Task<Administrator[]> Get(string admin)
+        {
+            var admins = MyDbContext.Administrators;
+            var data = await(from a in admins select a).ToArrayAsync();
+            return data;
+        }
     }
 }

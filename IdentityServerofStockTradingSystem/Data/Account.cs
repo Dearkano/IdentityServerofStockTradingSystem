@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
 namespace IdentityServerofStockTradingSystem.Data
 {
     /// <summary>
@@ -26,9 +28,10 @@ namespace IdentityServerofStockTradingSystem.Data
 
     }
 
-    [Table("administrator(name, password)")]
+    [Table("administrator")]
     public class Administrator
     {
+        [Key]
         [Column("name")]
         public string Name { get; set; }
 
@@ -39,6 +42,7 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("securities_account")]
     public class SecuritiesAccount
     {
+        [Key]
         [Column("account_num")]
         public string AccountNum { get; set; }
 
@@ -55,6 +59,7 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("person")]
     public class Person
     {
+        [Key]
         [Column("person_id")]
         public string PersonId { get; set; }
 
@@ -77,9 +82,11 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("funds_account")]
     public class FundAccount
     {
+        [Key]
         [Column("funds_account_num")]
         public string FundsAccountNum { get; set; }
 
+        [ForeignKey("account_num")]
         [Column("account_num")]
         public string AccountNum { get; set; }
 
@@ -99,6 +106,7 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("holder")]
     public class Holder
     {
+        [Key]
         [Column("account_num")]
         public string AccountNum { get; set; }
 
