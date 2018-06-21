@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServerofSystemTradingSystem.Data;
+using IdentityServerofStockTradingSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServerofSystemTradingSystem.Controllers
+namespace IdentityServerofStockTradingSystem.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController:Controller
@@ -33,6 +33,14 @@ namespace IdentityServerofSystemTradingSystem.Controllers
             //翻译成sql 差不多就是 select * from accounts
             //返回的是数组
             var data = await (from account in accounts select account).ToArrayAsync();
+            return data;
+        }
+
+        [HttpGet("admin")]
+        public async Task<Administrator[]> Get(string admin)
+        {
+            var admins = MyDbContext.Administrators;
+            var data = await(from a in admins select a).ToArrayAsync();
             return data;
         }
     }

@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace IdentityServerofSystemTradingSystem
+namespace IdentityServerofStockTradingSystem
 {
     public class Startup
     {
