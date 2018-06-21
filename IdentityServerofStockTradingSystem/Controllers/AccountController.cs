@@ -32,7 +32,7 @@ namespace IdentityServerofSystemTradingSystem.Controllers
             //linq 字符串 异步
             //翻译成sql 差不多就是 select * from accounts
             //返回的是数组
-            var data = await(from account in accounts  select account).ToArrayAsync();
+            var data = await (from account in accounts select account).ToArrayAsync();
             return data;
         }
     }
