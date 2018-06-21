@@ -43,8 +43,8 @@ namespace IdentityServerofStockTradingSystem.Data
     public class SecuritiesAccount
     {
         [Key]
-        [Column("account_num")]
-        public string AccountNum { get; set; }
+        [Column("id")]
+        public string Id { get; set; }
 
         [Column("person_id")]
         public string PersonId { get; set; }
@@ -83,12 +83,12 @@ namespace IdentityServerofStockTradingSystem.Data
     public class FundAccount
     {
         [Key]
-        [Column("funds_account_num")]
-        public string FundsAccountNum { get; set; }
+        [Column("id")]
+        public string Id { get; set; }
 
-        [ForeignKey("account_num")]
-        [Column("account_num")]
-        public string AccountNum { get; set; }
+        [ForeignKey("account_id")]
+        [Column("account_id")]
+        public string AccountId { get; set; }
 
         [Column("password")]
         public string Password { get; set; }
@@ -107,8 +107,8 @@ namespace IdentityServerofStockTradingSystem.Data
     public class Holder
     {
         [Key]
-        [Column("account_num")]
-        public string AccountNum { get; set; }
+        [Column("account_id")]
+        public string AccountId { get; set; }
 
         [Column("stock_code")]
         public string StockCode { get; set; }
