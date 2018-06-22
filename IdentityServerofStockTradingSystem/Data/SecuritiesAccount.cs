@@ -10,6 +10,8 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("securities_account")]
     public class SecuritiesAccount
     {
+        public SecuritiesAccount() { }
+
         public SecuritiesAccount(string id, string person_id, string account_type)
         {
             Id = id;
