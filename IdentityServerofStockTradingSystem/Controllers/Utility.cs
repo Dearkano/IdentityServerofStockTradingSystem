@@ -15,7 +15,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string Account_id { get; set; }
         public char Account_type { get; set; }
         public double Balance_available { get; set; }
-        public double Balance_unavailabble { get; set; }
+        public double Balance_unavailable { get; set; }
         public string Person_id { get; set; }
         public string Name { get; set; }
         public char Sex { get; set; }

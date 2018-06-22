@@ -12,13 +12,18 @@ namespace IdentityServerofStockTradingSystem.Controllers
 {
     public class FreezeValueInfo
     {
-        public string stock_account;
-        public string value;
+       
+        public string stock_account {get; set;}
+        public string value{get;set;}
     }
+    // 修改信息接口
     public class UpdateInfo
     {
-
+       
+        public string item{get;set;}// 要修改的条目
+        public string afterInfo{get;set;} // 修改后的信息
     }
+
     [Route("api/[controller]")]
     public class AccountController:Controller
     {
@@ -127,5 +132,6 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
             throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
         }
+        
     }
 }
