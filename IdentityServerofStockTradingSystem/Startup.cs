@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Sakura.AspNetCore.Mvc;
 
 namespace IdentityServerofStockTradingSystem
 {
@@ -41,6 +42,10 @@ namespace IdentityServerofStockTradingSystem
             });
 
             services.AddAuthentication("DefaultAuthentication");
+            services.AddMvc(options =>
+            {
+                options.EnableActionResultExceptionFilter(); // ActionResult 异常
+            });
             //services.AddScheme<AuthenticationSchemeOptions, Authorization.Authentication>("DefaultAuthentication", null);
             services.AddMvc();
 
