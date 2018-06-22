@@ -10,6 +10,18 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("person")]
     public class Person
     {
+        public Person() { }
+
+        public Person(string person_id, string name, string sex, string address, string email, string phone)
+        {
+            PersonId = person_id;
+            Name = name;
+            Sex = sex;
+            Address = address;
+            Email = email;
+            PhoneNumber = phone;
+        }
+        
         [Key]
         [Column("person_id")]
         public string PersonId { get; set; }

@@ -10,6 +10,17 @@ namespace IdentityServerofStockTradingSystem.Data
     [Table("funds_account")]
     public class FundAccount
     {
+        public FundAccount() { }
+
+        public FundAccount(string id, string account_id, string password)
+        {
+            Id = id;
+            AccountId = account_id;
+            Password = password;
+            BalanceAvailable = 0;
+            BalanceUnAvailable = 0;
+            AccountStatus = "n";
+        }
         [Key]
         [Column("id")]
         public string Id { get; set; }
