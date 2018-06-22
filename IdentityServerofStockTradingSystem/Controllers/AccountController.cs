@@ -10,6 +10,15 @@ using Sakura.AspNetCore.Mvc;
 
 namespace IdentityServerofStockTradingSystem.Controllers
 {
+    public class FreezeValueInfo
+    {
+        public string stock_account;
+        public string value;
+    }
+    public class UpdateInfo
+    {
+
+    }
     [Route("api/[controller]")]
     public class AccountController:Controller
     {
@@ -62,6 +71,61 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var admins = MyDbContext.Administrators;
             var data = await(from a in admins select a).ToArrayAsync();
             return data;
+        }
+
+        [HttpPost("freeze")]
+        public async Task<IActionResult> FreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
+        {   
+            string account = freezeValueInfo.stock_account;
+            decimal value = decimal.Parse(freezeValueInfo.value);
+            // 首先找出当前的活动资金和冻结资金
+            var accountInfo = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(account) select i).FirstOrDefaultAsync();
+            if(accountInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+            }
+            decimal avail = accountInfo.BalanceAvailable;
+            decimal unavail = accountInfo.BalanceUnAvailable;
+            if(avail < value)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "frozen value out of range");
+            }
+            else
+            {
+                accountInfo.BalanceAvailable -= value;
+                accountInfo.BalanceUnAvailable += value;
+                MyDbContext.FundAccounts.Update(accountInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+        }
+        [HttpPost("unfreeze")]
+        public async Task<IActionResult> UnFreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
+        {
+            string account = freezeValueInfo.stock_account;
+            decimal value = decimal.Parse(freezeValueInfo.value);
+            // 首先找出当前的活动资金和冻结资金
+            var accountInfo = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(account) select i).FirstOrDefaultAsync();
+            if (accountInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+            }
+            decimal avail = accountInfo.BalanceAvailable;
+            decimal unavail = accountInfo.BalanceUnAvailable;
+            if (unavail < value)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "unfrozen value out of range");
+            }
+            else
+            {
+                accountInfo.BalanceAvailable += value;
+                accountInfo.BalanceUnAvailable -= value;
+                MyDbContext.FundAccounts.Update(accountInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
         }
     }
 }
