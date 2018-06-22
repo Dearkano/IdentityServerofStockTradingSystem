@@ -34,7 +34,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var fundAccounts = MyDbContext.FundAccounts;
             //linq 字符串 异步
             var FundAccount = await (from i in fundAccounts where i.AccountId.Equals(message.UserId) select i).FirstOrDefaultAsync();
-            var holder = await (from i in holders where (i.AccountId == message.UserId && i.StockCode == message.StockCode) select i).FirstOrDefaultAsync();
+            var holder = await (from i in holders where (i.AccountId.Equals(message.UserId) && i.StockCode.Equals(message.StockCode)) select i).FirstOrDefaultAsync();
 
             if (fundAccounts != null)
             {
@@ -46,21 +46,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
                     else
                     {
                         FundAccount.BalanceAvailable -= message.Price * message.Value;
+                        fundAccounts.Update(FundAccount);
+                        await MyDbContext.SaveChangesAsync();
                         if (holder != null)
                         {
                             decimal sum = holder.AverageCost * (holder.SharesNum + holder.UnavailableSharesNum) + message.Price * message.Value;
-                            try
-                            {
-                                holder.SharesNum += message.Value;
-                                holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
-
-                                await MyDbContext.SaveChangesAsync();
-                                return Ok();
-                            }
-                            catch (Exception e)
-                            {
-                                throw new ActionResultException(HttpStatusCode.BadRequest, "card message is not right");
-                            }
+                            holder.SharesNum += message.Value;
+                            holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
+                            holders.Update(holder);
+                            await MyDbContext.SaveChangesAsync();
+                            return Ok();
 
                         }
                         else
@@ -83,22 +78,24 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 else if (message.Type == "sell")
                 {
                     if (holder == null || holder.SharesNum < message.Value)
-                        throw new ActionResultException(HttpStatusCode.BadRequest, "something is error");
+                        throw new ActionResultException(HttpStatusCode.BadRequest, "the amout of stock is not enough");
                     else
                     {
-                        try
+                        FundAccount.BalanceAvailable += message.Price * message.Value;
+                        fundAccounts.Update(FundAccount);
+                        await MyDbContext.SaveChangesAsync();
+
+
+                        if (holder.SharesNum == message.Value && holder.UnavailableSharesNum == 0)
+                            holders.Remove(holder);
+                        else
                         {
-                            FundAccount.BalanceAvailable += message.Price * message.Value;
                             holder.SharesNum -= message.Value;
-                            if (holder.SharesNum == 0 && holder.UnavailableSharesNum == 0)
-                                holders.Remove(holder);
-                            await MyDbContext.SaveChangesAsync();
-                            return Ok();
+                            holders.Update(holder);
                         }
-                        catch (Exception e)
-                        {
-                            throw new ActionResultException(HttpStatusCode.BadRequest, "something is error");
-                        }
+
+                        await MyDbContext.SaveChangesAsync();
+                        return Ok();
                     }
 
                 }
@@ -174,11 +171,11 @@ namespace IdentityServerofStockTradingSystem.Controllers
     //用于买卖股票
     public class StockMessage
     {
-        public string UserId;
-        public string StockCode;
-        public int Value;
-        public decimal Price;
-        public string Type;
+        public string UserId; //股票账户
+        public string StockCode; //股票代码
+        public int Value;       //股票数
+        public decimal Price;   //股票价格
+        public string Type;     //操作类型 buy/sell
     }
 
     // 用于股票的冻结解冻：by shen
@@ -189,15 +186,5 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string value;   // 要冻结的股量
     }
 
-    //public class AccountMessage
-    //{
-    //    public string AccountId;
-    //    public string Name;
-    //    public string Sex;
-    //    public string PersonId;
-    //    public string AccountType;
-    //    public decimal BalanceAvailable;
-    //    public decimal BalanceUnAvailable;
-    //}
 
 }
