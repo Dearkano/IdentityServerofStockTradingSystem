@@ -57,6 +57,29 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string stock_account { get; set;}
     }
 
+    public class UpdateInfo
+    {
+        [Required]
+        public string AdminName { get; set; }
+        [Required]
+        public string AdminPassword { get; set; }
+        [Required]
+        public string item { get; set; }// 要修改的条目
+        [Required]
+        public string afterInfo { get; set; } // 修改后的信息
+    }
+    // 冻结与解冻接口
+    public class Freeze
+    {
+        [Required]
+        public string AdminName { get; set; }
+        [Required]
+        public string AdminPassword { get; set; }
+        [Required]
+        public string accountId;
+    }
+
+
     [Route("api/account")]
     public class AdminController:Controller
     {
@@ -180,5 +203,184 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
             throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
         }
+
+        [HttpPost("freeze")]
+        // 冻结账户
+        public async Task<IActionResult> FreezeAccount([FromBody] Freeze freeze)
+        {
+            var name = freeze.AdminName;
+            var password = freeze.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            // 校验密码
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                var accountId = freeze.accountId;
+                var accInfo = await (from i in MyDbContext.SecuritiesAccounts
+                                     where i.Id.Equals(accountId)
+                                     select i).FirstOrDefaultAsync();
+                try
+                {
+                    accInfo.AccountStatus = "a"; // abnormal
+                    MyDbContext.SecuritiesAccounts.Update(accInfo);
+                    await MyDbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                catch
+                {
+                    throw new ActionResultException(HttpStatusCode.Unauthorized, "cannot freeze");
+                }
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
+
+        [HttpPost("unfreeze")]
+
+        public async Task<IActionResult> UnFreezeAccount([FromBody] Freeze freeze)
+        {
+            var name = freeze.AdminName;
+            var password = freeze.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            // 校验密码
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                var accountId = freeze.accountId;
+                var accInfo = await (from i in MyDbContext.SecuritiesAccounts
+                                     where i.Id.Equals(accountId)
+                                     select i).FirstOrDefaultAsync();
+                try
+                {
+                    accInfo.AccountStatus = "n"; //normal
+                    MyDbContext.SecuritiesAccounts.Update(accInfo);
+                    await MyDbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                catch
+                {
+                    throw new ActionResultException(HttpStatusCode.Unauthorized, "cannot unfreeze");
+                }
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
+
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateInfo([FromBody] UpdateInfo updateInfo)
+        {
+            // 首先验证管理员身份
+            var name = updateInfo.AdminName;
+            var password = updateInfo.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            // 校验密码
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                //获得当前操作的信息
+                var token = Request.Headers["Authorization"];
+                TResponse response;
+                try
+                {
+                    response = await Utility.GetIdentity(token);
+                }
+                catch
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
+                }
+                string funId = response.Id;
+                string accountId = response.Account_id;
+                string personId = response.Person_id;
+                // 理论上只能修改account_type和person表下的东西
+                string item = updateInfo.item; // 取出要修改的列名
+                string afterInfo = updateInfo.afterInfo; // 取出修改后值的字符串状态
+                if (string.IsNullOrWhiteSpace(item) || string.IsNullOrWhiteSpace(afterInfo))
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "empty request");
+                }
+                // 修改账号状态
+                // 获得三个表的引用
+                // 资金表
+                var funInfo = await (from i in MyDbContext.FundAccounts
+                                     where i.Id.Equals(funId)
+                                     select i).FirstOrDefaultAsync();
+                // 账户信息表
+                var accInfo = await (from i in MyDbContext.SecuritiesAccounts
+                                     where i.Id.Equals(accountId)
+                                     select i).FirstOrDefaultAsync();
+                // 个人信息表
+                var perInfo = await (from i in MyDbContext.People
+                                     where i.PersonId.Equals(personId)
+                                     select i).FirstOrDefaultAsync();
+                if (funInfo == null || accInfo == null || perInfo == null)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such person or account");
+                }
+                // 如果修改的是账户类型
+                if (item == "account_type")
+                {
+                    char temp = afterInfo[0];
+                    // 修正
+                    if (temp != 'g' && temp != 'n')
+                    {
+                        throw new ActionResultException(HttpStatusCode.BadRequest, "illegal input");
+                    }
+                    accInfo.AccountType = temp;
+                }
+                else if (item == "fun_password")
+                {
+                    funInfo.Password = afterInfo;
+                }
+                else if (item == "name")
+                {
+                    perInfo.Name = afterInfo;
+                }
+                else if (item == "sex")
+                {
+                    perInfo.Sex = afterInfo;
+                }
+                else if (item == "address")
+                {
+                    perInfo.Address = afterInfo;
+                }
+                else if (item == "email")
+                {
+                    perInfo.Email = afterInfo;
+                }
+                else if (item == "phone_number")
+                {
+                    perInfo.PhoneNumber = afterInfo;
+                }
+                else // 不能修改的属性
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "illegal item");
+                }
+                try
+                {
+                    MyDbContext.SecuritiesAccounts.Update(accInfo);
+                    MyDbContext.FundAccounts.Update(funInfo);
+                    MyDbContext.People.Update(perInfo);
+                    await MyDbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                catch
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "illegal input");
+                }
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
+
     }
 }

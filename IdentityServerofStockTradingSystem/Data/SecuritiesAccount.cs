@@ -28,7 +28,7 @@ namespace IdentityServerofStockTradingSystem.Data
         public string PersonId { get; set; }
 
         [Column("account_type")]
-        public string AccountType { get; set; }
+        public char AccountType { get; set; }
 
         [Column("account_status")]
         public string AccountStatus { get; set; }

@@ -17,13 +17,12 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string value{get;set;}
     }
     // 修改信息接口
-    public class UpdateInfo
+   
+    public class UpdateValueInfo
     {
-       
-        public string item{get;set;}// 要修改的条目
-        public string afterInfo{get;set;} // 修改后的信息
+        public string type;  // recharge | withdraw
+        public string value; // 取出/存入
     }
-
     [Route("api/[controller]")]
     public class AccountController:Controller
     {
@@ -133,5 +132,60 @@ namespace IdentityServerofStockTradingSystem.Controllers
             throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
         }
         
+        [HttpPost("balance")]
+        public async Task<IActionResult>UpdateValue([FromBody] UpdateValueInfo updateValueInfo)
+        {
+            var token = Request.Headers["Authorization"];
+            TResponse response;
+            try
+            {
+                response = await Utility.GetIdentity(token);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
+            }
+            string funId = response.Id;
+            string accountId = response.Account_id;
+            string personId  = response.Person_id;
+            // 检测账户是否处于冻结状态
+            var accInfo = await (from i in MyDbContext.SecuritiesAccounts
+                                 where i.Id.Equals(accountId)
+                                 select i).FirstOrDefaultAsync();
+            if(accInfo.AccountStatus == "a") // 挂失/冻结状态
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
+            }
+            decimal value = decimal.Parse(updateValueInfo.value); // 转换为小数
+            var funInfo = await (from i in MyDbContext.FundAccounts 
+                        where i.Id.Equals(funId) select i).FirstOrDefaultAsync();
+            decimal nowBalance = funInfo.BalanceAvailable;
+            string type = updateValueInfo.type;
+            if(type == "recharge")
+            {
+                funInfo.BalanceAvailable += value;
+            }
+            else if(type == "withdraw")
+            {
+                if(value > nowBalance)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "value out of range");
+                }
+                else
+                {
+                    funInfo.BalanceAvailable -= value;
+                }
+            }
+            try
+            {
+                MyDbContext.FundAccounts.Update(funInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "unexpected input");
+            }
+        }
     }
 }

@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="C:\Users\沈子衿\Desktop\AccountController.cs" Link="AccountController.cs" />
+    <Compile Include="C:\Users\沈子衿\Desktop\AdminController.cs" Link="AdminController.cs" />
+    <Compile Include="C:\Users\沈子衿\Desktop\StockController.cs" Link="StockController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Authentication\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

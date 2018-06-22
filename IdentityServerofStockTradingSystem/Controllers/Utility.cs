@@ -35,9 +35,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
             };
             request.Headers.Add("Authorization", access_token);
             var response = await client.SendAsync(request);
-            var json = await response.Content.ReadAsStringAsync();
-            TResponse res = JsonConvert.DeserializeObject<TResponse>(json);
-            return res;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("invalid token");
+            }
+            else
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                TResponse res = JsonConvert.DeserializeObject<TResponse>(json);
+                return res;
+            }
         }
     }
 }
