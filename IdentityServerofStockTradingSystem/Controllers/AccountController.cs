@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using IdentityServerofStockTradingSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Sakura.AspNetCore.Mvc;
 
 namespace IdentityServerofStockTradingSystem.Controllers
 {
@@ -22,6 +24,22 @@ namespace IdentityServerofStockTradingSystem.Controllers
             MyDbContext = DbContext;
             //        booksAmount = DbContext.Books.Count();
         }
+
+        public async Task<IActionResult> Demo()
+        {
+            //拿单个数据 拿不到就是null
+            var d = await (from i in MyDbContext.Accounts where i.balance == 2 select i).FirstOrDefaultAsync();
+
+            //拿数据变成数组
+            var a = await (from i in MyDbContext.Accounts where i.name.Equals("zju")select i).ToArrayAsync();
+
+            //返回200
+            return Ok();
+            //返回报错
+            //bad request 400 unauthorized 401  forbidden 403 and so on
+            throw new ActionResultException(HttpStatusCode.BadRequest, "error message");
+        }
+
         //http路由 这里是 /api/account/account
         //如果有参数  可以是 [HttpGet("account/{id}")] 然后Get(int id)取参数
         [HttpGet("account")]
