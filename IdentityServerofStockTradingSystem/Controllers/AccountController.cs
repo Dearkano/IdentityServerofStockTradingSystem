@@ -24,9 +24,11 @@ namespace IdentityServerofStockTradingSystem.Controllers
             MyDbContext = DbContext;
             //        booksAmount = DbContext.Books.Count();
         }
-
+        [HttpGet("test")]
         public async Task<IActionResult> Demo()
         {
+            var token = Request.Headers["Authorization"];
+            TResponse response = await Utility.GetIdentity(token);
             //拿单个数据 拿不到就是null
             var d = await (from i in MyDbContext.Accounts where i.balance == 2 select i).FirstOrDefaultAsync();
 
