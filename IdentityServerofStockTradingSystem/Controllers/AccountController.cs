@@ -73,7 +73,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             return data;
         }
 
-        [HttpGet("freeze")]
+        [HttpPost("freeze")]
         public async Task<IActionResult> FreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
         {   
             string account = freezeValueInfo.stock_account;
@@ -100,7 +100,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
             throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
         }
-        [HttpGet("unfreeze")]
+        [HttpPost("unfreeze")]
         public async Task<IActionResult> UnFreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
         {
             string account = freezeValueInfo.stock_account;
