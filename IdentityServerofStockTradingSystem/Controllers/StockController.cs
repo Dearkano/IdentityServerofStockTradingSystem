@@ -118,6 +118,58 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var data = await (from a in holders where accountId == a.AccountId select a).ToArrayAsync();
             return data;
         }
+
+        [HttpPost("freeze")]
+        public async Task<IActionResult> FreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
+        {
+            string account = freezeStockInfo.stock_account;
+            string code = freezeStockInfo.stock_id;
+            int value = int.Parse(freezeStockInfo.value);
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(code) select i).FirstOrDefaultAsync();
+            if(stockInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
+            }
+            if(value > stockInfo.SharesNum)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "frozen value out of range");
+            }
+            else
+            {
+                stockInfo.SharesNum -= value;
+                stockInfo.UnavailableSharesNum += value;
+                MyDbContext.Holders.Update(stockInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
+        }
+
+        [HttpPost("unfreeze")]
+        public async Task<IActionResult> UnFreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
+        {
+            string account = freezeStockInfo.stock_account;
+            string code = freezeStockInfo.stock_id;
+            int value = int.Parse(freezeStockInfo.value);
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(code) select i).FirstOrDefaultAsync();
+            if (stockInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
+            }
+            if (value > stockInfo.UnavailableSharesNum)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "unfrozen value out of range");
+            }
+            else
+            {
+                stockInfo.SharesNum += value;
+                stockInfo.UnavailableSharesNum -= value;
+                MyDbContext.Holders.Update(stockInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
+        }
     }
     //用于买卖股票
     public class StockMessage
@@ -127,6 +179,14 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public int Value;
         public decimal Price;
         public string Type;
+    }
+
+    // 用于股票的冻结解冻：by shen
+    public class FreezeStockInfo
+    {
+        public string stock_account; // 股票账户
+        public string stock_id; // 操作id
+        public string value;   // 要冻结的股量
     }
 
     //public class AccountMessage
