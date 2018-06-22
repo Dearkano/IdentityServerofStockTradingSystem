@@ -29,15 +29,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> StockOperation([FromBody]StockMessage message)
         {
             //获取数据库的表
-            var securitiesAccounts = MyDbContext.SecuritiesAccounts;
+
             var holders = MyDbContext.Holders;
             var fundAccounts = MyDbContext.FundAccounts;
             //linq 字符串 异步
             var FundAccount = await (from i in fundAccounts where i.AccountId.Equals(message.UserId) select i).FirstOrDefaultAsync();
             var holder = await (from i in holders where (i.AccountId == message.UserId && i.StockCode == message.StockCode) select i).FirstOrDefaultAsync();
-            var account = await (from i in securitiesAccounts where i.Id.Equals(message.UserId) select i).FirstOrDefaultAsync();
-            if (account != null)
+
+            if (fundAccounts != null)
             {
+                //买股票
                 if (message.Type == "buy")
                 {
                     if (FundAccount.BalanceAvailable < message.Price * message.Value)
@@ -48,11 +49,47 @@ namespace IdentityServerofStockTradingSystem.Controllers
                         if (holder != null)
                         {
                             decimal sum = holder.AverageCost * (holder.SharesNum + holder.UnavailableSharesNum) + message.Price * message.Value;
-                            holder.SharesNum += message.Value;
-                            holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
-                            holders.Update(holder);
-                            await MyDbContext.SaveChangesAsync();
-                            return Ok();
+                            try
+                            {
+                                holder.SharesNum += message.Value;
+                                holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
+
+                                await MyDbContext.SaveChangesAsync();
+                                return Ok();
+                            }
+                            //处理并发冲突，照着写的
+                            catch (DbUpdateConcurrencyException ex)
+                            {
+                                foreach (var entry in ex.Entries)
+                                {
+                                    if (entry.Entity is Holder)
+                                    {
+                                        var proposedValues = entry.CurrentValues;
+                                        var databaseValues = entry.GetDatabaseValues();
+
+                                        foreach (var property in proposedValues.Properties)
+                                        {
+                                            var proposedValue = proposedValues[property];
+                                            var databaseValue = databaseValues[property];
+
+                                            // TODO: decide which value should be written to database
+                                            // proposedValues[property] = <value to be saved>;
+                                        }
+
+                                        // Refresh original values to bypass next concurrency check
+                                        entry.OriginalValues.SetValues(databaseValues);
+
+                                    }
+                                    else
+                                    {
+                                        throw new NotSupportedException(
+                                            "Don't know how to handle concurrency conflicts for "
+                                            + entry.Metadata.Name);
+                                    }
+                                }
+                                return Ok();
+                            }
+
                         }
                         else
                         {
@@ -70,19 +107,54 @@ namespace IdentityServerofStockTradingSystem.Controllers
                         }
                     }
                 }
+                //卖股票
                 else if (message.Type == "sell")
                 {
                     if (holder == null || holder.SharesNum < message.Value)
                         throw new ActionResultException(HttpStatusCode.BadRequest, "The amount of stock is not enough");
                     else
                     {
-                        FundAccount.BalanceAvailable += message.Price * message.Value;                
-                        await MyDbContext.SaveChangesAsync();
-                        holder.SharesNum -= message.Value;
-                        if (holder.SharesNum == 0 && holder.UnavailableSharesNum == 0)
-                            holders.Remove(holder);
-                        await MyDbContext.SaveChangesAsync();
-                        return Ok();
+                        try
+                        {
+                            FundAccount.BalanceAvailable += message.Price * message.Value;
+                            holder.SharesNum -= message.Value;
+                            if (holder.SharesNum == 0 && holder.UnavailableSharesNum == 0)
+                                holders.Remove(holder);
+                            await MyDbContext.SaveChangesAsync();
+                            return Ok();
+                        }
+                        //处理并发冲突，照着写的
+                        catch (DbUpdateConcurrencyException ex)
+                        {
+                            foreach (var entry in ex.Entries)
+                            {
+                                if (entry.Entity is Holder)
+                                {
+                                    var proposedValues = entry.CurrentValues;
+                                    var databaseValues = entry.GetDatabaseValues();
+
+                                    foreach (var property in proposedValues.Properties)
+                                    {
+                                        var proposedValue = proposedValues[property];
+                                        var databaseValue = databaseValues[property];
+
+                                        // TODO: decide which value should be written to database
+                                        // proposedValues[property] = <value to be saved>;
+                                    }
+
+                                    // Refresh original values to bypass next concurrency check
+                                    entry.OriginalValues.SetValues(databaseValues);
+
+                                }
+                                else
+                                {
+                                    throw new NotSupportedException(
+                                        "Don't know how to handle concurrency conflicts for "
+                                        + entry.Metadata.Name);
+                                }
+                            }
+                            return Ok();
+                        }
                     }
 
                 }
@@ -94,13 +166,6 @@ namespace IdentityServerofStockTradingSystem.Controllers
 
         }
 
-        //[HttpGet("account/{id}")]
-        //public async Task<Holder[]> Get(string id)
-        //{
-        //    var holders = MyDbContext.Holders;
-        //    var data = await (from a in holders where id == a.UserId select a).ToArrayAsync();
-        //    return data;
-        //}
 
         [HttpGet("{accountId}")]
         public async Task<Holder[]> GetStock(string accountId)
@@ -110,7 +175,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             return data;
         }
     }
-
+    //用于买卖股票
     public class StockMessage
     {
         public string UserId;
