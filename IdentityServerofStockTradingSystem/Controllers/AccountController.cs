@@ -187,5 +187,24 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "unexpected input");
             }
         }
+        //查询账户信息
+        [HttpGet("{Id}")]
+        public async Task<TResponse> GetAccount(string Id)
+        {
+            var token = Request.Headers["Authorization"];
+            TResponse response;
+            try
+            {
+                response = await Utility.GetIdentity(token);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
+            }
+
+            return response;
+
+
+        }
     }
 }
