@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,12 @@ namespace IdentityServerofStockTradingSystem.Controllers
     {
         public string type;  // recharge | withdraw
         public string value; // 取出/存入
+    }
+
+    public class Vip
+    {
+        public string accountId;
+        public string cost;
     }
     [Route("api/[controller]")]
     public class AccountController:Controller
@@ -219,8 +226,59 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
 
             return response;
+        }
 
-
+        [HttpPost("vip")]
+        public async Task<IActionResult> SetVip([FromBody] Vip vip)
+        {
+            var accInfo = await (from i in MyDbContext.SecuritiesAccounts
+                                 where i.Id.Equals(vip.accountId)
+                                 select i).FirstOrDefaultAsync();
+            int cost;
+            try
+            {
+                cost = int.Parse(vip.cost.ToString());
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
+            }
+            if(accInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+            }
+            if(accInfo.AccountStatus == "a")
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "account forzen");
+            }
+            var funInfo = await (from i in MyDbContext.FundAccounts 
+                        where i.AccountId.Equals(vip.accountId) select i).FirstOrDefaultAsync();
+            if(accInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such fund account");
+            }
+            if(funInfo.BalanceAvailable < cost)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no enough money");
+            }
+            if(accInfo.AccountType == "g")
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "has been vip");
+            }
+            try
+            {
+                accInfo.AccountType = "n";
+                funInfo.BalanceAvailable -= cost;
+                MyDbContext.SecuritiesAccounts.Update(accInfo);
+                MyDbContext.FundAccounts.Update(funInfo);
+                await MyDbContext.SaveChangesAsync();
+                return Ok();
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid modification");
+            }
         }
     }
 }
+
