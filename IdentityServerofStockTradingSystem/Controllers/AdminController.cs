@@ -54,7 +54,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
 
         // 用于新建资金账户
         [Required]
-        public string stock_account { get; set;}
+        public string stock_account { get; set; }
+
+        [Required]
+        public string password { get; set; }
     }
 
     public class UpdateInfo
@@ -190,15 +193,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     thisFundAccount.AccountStatus = "n"; // 找回资金账户
                     MyDbContext.FundAccounts.Update(thisFundAccount);
+                    await MyDbContext.SaveChangesAsync();
                     return Ok(thisFundAccount);
                 }
 
                 var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 var id = (timestamp + 3160103827).ToString();
                 MD5 md5 = new MD5CryptoServiceProvider();
-                var initial_password = BitConverter.ToString((md5.ComputeHash(Encoding.UTF8.GetBytes(id.Substring(6))))).Replace("-", "");
-                var newFundAccount = new FundAccount(id, bindInfo.stock_account, initial_password.Substring(6, 6));
-                await fundsAccounts.AddAsync(newFundAccount);
+                var initial_password = bindInfo.password;
+                var newFundAccount = new FundAccount(id, bindInfo.stock_account, initial_password);
+                fundsAccounts.Add(newFundAccount);
                 await MyDbContext.SaveChangesAsync();
 
                 return Ok(newFundAccount);
