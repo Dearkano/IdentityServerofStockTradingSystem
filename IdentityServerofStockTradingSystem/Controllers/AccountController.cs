@@ -21,6 +21,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
    
     public class UpdateValueInfo
     {
+        public string accountId; // 账户id
         public string type;  // recharge | withdraw
         public string value; // 取出/存入
     }
@@ -158,19 +159,14 @@ namespace IdentityServerofStockTradingSystem.Controllers
         [HttpPost("balance")]
         public async Task<IActionResult>UpdateValue([FromBody] UpdateValueInfo updateValueInfo)
         {
-            var token = Request.Headers["Authorization"];
-            TResponse response;
-            try
+            
+            string accountId = updateValueInfo.accountId; // 获取accountId
+            var funInfo = await (from i in MyDbContext.FundAccounts 
+                        where i.AccountId.Equals(accountId) select i).FirstOrDefaultAsync();
+            if(funInfo == null)
             {
-                response = await Utility.GetIdentity(token);
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
             }
-            catch
-            {
-                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
-            }
-            string funId = response.Id;
-            string accountId = response.Account_id;
-            string personId  = response.Person_id;
             // 检测账户是否处于冻结状态
             var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                  where i.Id.Equals(accountId)
@@ -180,8 +176,6 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
             }
             decimal value = decimal.Parse(updateValueInfo.value); // 转换为小数
-            var funInfo = await (from i in MyDbContext.FundAccounts 
-                        where i.Id.Equals(funId) select i).FirstOrDefaultAsync();
             decimal nowBalance = funInfo.BalanceAvailable;
             string type = updateValueInfo.type;
             if(type == "recharge")
@@ -279,6 +273,8 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid modification");
             }
         }
+
+        
     }
 }
 
