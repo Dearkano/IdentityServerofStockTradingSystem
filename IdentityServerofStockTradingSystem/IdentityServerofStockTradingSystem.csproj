@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -6,12 +6,6 @@
     <RootNamespace>IdentityServerofStockTradingSystem</RootNamespace>
     <Company>ZJU</Company>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="C:\Users\沈子衿\Desktop\AccountController.cs" Link="AccountController.cs" />
-    <Compile Include="C:\Users\沈子衿\Desktop\AdminController.cs" Link="AdminController.cs" />
-    <Compile Include="C:\Users\沈子衿\Desktop\StockController.cs" Link="StockController.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Authentication\" />

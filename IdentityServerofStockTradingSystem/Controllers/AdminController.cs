@@ -204,8 +204,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
         }
 
-        [HttpPost("freeze")]
-        // 冻结账户
+        [HttpPost("freezeaccount")]
         public async Task<IActionResult> FreezeAccount([FromBody] Freeze freeze)
         {
             var name = freeze.AdminName;
@@ -220,9 +219,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             if (password.Equals(storedPassword))
             {
                 var accountId = freeze.accountId;
-                var accInfo = await (from i in MyDbContext.SecuritiesAccounts
-                                     where i.Id.Equals(accountId)
-                                     select i).FirstOrDefaultAsync();
+                var accInfo = await (from i in MyDbContext.SecuritiesAccounts where i.Id==accountId select i).FirstOrDefaultAsync();
                 try
                 {
                     accInfo.AccountStatus = "a"; // abnormal
@@ -238,8 +235,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
         }
 
-        [HttpPost("unfreeze")]
-
+        [HttpPost("unfreezeaccount")]
         public async Task<IActionResult> UnFreezeAccount([FromBody] Freeze freeze)
         {
             var name = freeze.AdminName;
@@ -330,9 +326,9 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 // 如果修改的是账户类型
                 if (item == "account_type")
                 {
-                    char temp = afterInfo[0];
+                    string temp = afterInfo;
                     // 修正
-                    if (temp != 'g' && temp != 'n')
+                    if (temp != "g" && temp != "n")
                     {
                         throw new ActionResultException(HttpStatusCode.BadRequest, "illegal input");
                     }

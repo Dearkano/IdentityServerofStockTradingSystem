@@ -17,7 +17,7 @@ namespace IdentityServerofStockTradingSystem.Data
             Id = id;
             PersonId = person_id;
             AccountType = account_type;
-            AccountStatus = "normal";
+            AccountStatus = "n";
         }
 
         [Key]
@@ -28,7 +28,7 @@ namespace IdentityServerofStockTradingSystem.Data
         public string PersonId { get; set; }
 
         [Column("account_type")]
-        public char AccountType { get; set; }
+        public string AccountType { get; set; }
 
         [Column("account_status")]
         public string AccountStatus { get; set; }

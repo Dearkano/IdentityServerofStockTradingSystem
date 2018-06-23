@@ -38,18 +38,18 @@ namespace IdentityServerofStockTradingSystem.Controllers
             //        booksAmount = DbContext.Books.Count();
         }
         [HttpGet("test")]
-        public async Task<IActionResult> Demo()
+        public async Task<SecuritiesAccount[]> Demo()
         {
-            var token = Request.Headers["Authorization"];
-            TResponse response = await Utility.GetIdentity(token);
+            //var token = Request.Headers["Authorization"];
+           // TResponse response = await Utility.GetIdentity(token);
             //拿单个数据 拿不到就是null
             var d = await (from i in MyDbContext.Accounts where i.balance == 2 select i).FirstOrDefaultAsync();
 
             //拿数据变成数组
-            var a = await (from i in MyDbContext.Accounts where i.name.Equals("zju")select i).ToArrayAsync();
+            var a = await (from i in MyDbContext.SecuritiesAccounts select i).ToArrayAsync();
 
             //返回200
-            return Ok();
+            return a;
             //返回报错
             //bad request 400 unauthorized 401  forbidden 403 and so on
             throw new ActionResultException(HttpStatusCode.BadRequest, "error message");
