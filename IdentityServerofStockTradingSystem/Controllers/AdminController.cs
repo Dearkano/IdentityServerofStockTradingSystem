@@ -145,8 +145,8 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 }
 
                 var person = new Person(accountInfo.person_id, accountInfo.name, accountInfo.sex, accountInfo.address, accountInfo.email, accountInfo.phone_number);
-                await people.AddAsync(person);
-
+                MyDbContext.People.Add(person);
+                await MyDbContext.SaveChangesAsync();
                 var securitiesAccounts = MyDbContext.SecuritiesAccounts;
                 var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 var id = timestamp.ToString();
@@ -154,7 +154,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     AccountStatus = "n" // normal
                 };
-                await securitiesAccounts.AddAsync(account);
+                MyDbContext.SecuritiesAccounts.Add(account);
 
                 await MyDbContext.SaveChangesAsync();
                 return Ok(account);
