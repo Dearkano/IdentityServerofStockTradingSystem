@@ -81,7 +81,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> FreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
         {   
             string account = freezeValueInfo.stock_account;
-            decimal value = decimal.Parse(freezeValueInfo.value);
+            decimal value;
+            try
+            {
+                value = decimal.Parse(freezeValueInfo.value);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
+            }
             // 首先找出当前的活动资金和冻结资金
             var accountInfo = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(account) select i).FirstOrDefaultAsync();
             if(accountInfo == null)
@@ -108,7 +116,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> UnFreezeValue([FromBody] FreezeValueInfo freezeValueInfo)
         {
             string account = freezeValueInfo.stock_account;
-            decimal value = decimal.Parse(freezeValueInfo.value);
+            decimal value;
+            try
+            {
+                value = decimal.Parse(freezeValueInfo.value);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
+            }
             // 首先找出当前的活动资金和冻结资金
             var accountInfo = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(account) select i).FirstOrDefaultAsync();
             if (accountInfo == null)
