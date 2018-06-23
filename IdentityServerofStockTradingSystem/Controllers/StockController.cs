@@ -112,10 +112,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
 
 
         [HttpGet("{accountId}")]
-        public async Task<Holder[]> GetStock(string accountId)
+        public async Task<StockInfo[]> GetStock(string accountId)
         {
             var holders = MyDbContext.Holders;
-            var data = await (from a in holders where accountId == a.AccountId select a).ToArrayAsync();
+            var data = await (from a in holders where accountId == a.AccountId select new StockInfo { StockCode = a.StockCode, SharesNum = a.SharesNum, AverageCost = a.AverageCost}).ToArrayAsync();
             return data;
         }
 
@@ -180,6 +180,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public decimal Price;   //股票价格
         public string Type;     //操作类型 buy/sell
     }
+    //查询返回的股票信息
+    public class StockInfo
+    {
+        public string StockCode;
+        public int SharesNum;
+        public decimal AverageCost;
+    }
+
+
 
     // 用于股票的冻结解冻：by shen
     public class FreezeStockInfo
