@@ -60,13 +60,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
                         }
                         else
                         {
+
                             Holder newHolder = new Holder
                             {
+                                Id = message.UserId + message.StockCode,
                                 AccountId = message.UserId,
                                 StockCode = message.StockCode,
                                 SharesNum = message.Value,
                                 UnavailableSharesNum = 0,
                                 AverageCost = message.Price
+                              
                             };
                             await holders.AddAsync(newHolder);
                             await MyDbContext.SaveChangesAsync();
