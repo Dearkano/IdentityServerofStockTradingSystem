@@ -54,7 +54,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
 
         // 用于新建资金账户
         [Required]
-        public string stock_account { get; set;}
+        public string stock_account { get; set; }
+
+        [Required]
+        public string password { get; set; }
     }
 
     public class UpdateInfo
@@ -81,6 +84,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string accountId;
     }
 
+    public class DeleteInfo
+    {
+        [Required]
+        public string AdminName { get; set; }
+        [Required]
+        public string AdminPassword { get; set; }
+        [Required]
+        public string Id { get; set; }
+    }
 
     [Route("api/account")]
     public class AdminController:Controller
@@ -92,21 +104,21 @@ namespace IdentityServerofStockTradingSystem.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<string> Post([FromBody]AdminInfo adminInfo)
+        public async Task<IActionResult> Post([FromBody]AdminInfo adminInfo)
         {
             var name = adminInfo.AdminName;
             var password = adminInfo.AdminPassword;
             var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
             if (thisUser.Length == 0)
             {
-                return "user doesn't exist";
+                throw new ActionResultException(HttpStatusCode.BadRequest, "Wrong name");
             }
             var storedPassword = thisUser[0].Password;
             if (password.Equals(storedPassword))
             {
-                return "login success";
+                return Ok("login success");
             }
-            return "password error";
+            throw new ActionResultException(HttpStatusCode.BadRequest, "Wrong password");
         }
 
 
@@ -145,8 +157,8 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 }
 
                 var person = new Person(accountInfo.person_id, accountInfo.name, accountInfo.sex, accountInfo.address, accountInfo.email, accountInfo.phone_number);
-                await people.AddAsync(person);
-
+                MyDbContext.People.Add(person);
+                await MyDbContext.SaveChangesAsync();
                 var securitiesAccounts = MyDbContext.SecuritiesAccounts;
                 var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 var id = timestamp.ToString();
@@ -154,7 +166,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     AccountStatus = "n" // normal
                 };
-                await securitiesAccounts.AddAsync(account);
+                MyDbContext.SecuritiesAccounts.Add(account);
 
                 await MyDbContext.SaveChangesAsync();
                 return Ok(account);
@@ -181,7 +193,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is not valid");
                 }
-                var thisFundAccount = await (from f in MyDbContext.FundAccounts where f.Id.Equals(bindInfo.stock_account) select f).FirstOrDefaultAsync();
+                var thisFundAccount = await (from f in MyDbContext.FundAccounts where f.AccountId.Equals(bindInfo.stock_account) select f).FirstOrDefaultAsync();
                 if (thisFundAccount != null && thisFundAccount.AccountStatus != "a")
                 {
                     throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is already binded with a fund account");
@@ -190,15 +202,16 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     thisFundAccount.AccountStatus = "n"; // 找回资金账户
                     MyDbContext.FundAccounts.Update(thisFundAccount);
+                    await MyDbContext.SaveChangesAsync();
                     return Ok(thisFundAccount);
                 }
 
                 var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 var id = (timestamp + 3160103827).ToString();
                 MD5 md5 = new MD5CryptoServiceProvider();
-                var initial_password = BitConverter.ToString((md5.ComputeHash(Encoding.UTF8.GetBytes(id.Substring(6))))).Replace("-", "");
-                var newFundAccount = new FundAccount(id, bindInfo.stock_account, initial_password.Substring(6, 6));
-                await fundsAccounts.AddAsync(newFundAccount);
+                var initial_password = bindInfo.password;
+                var newFundAccount = new FundAccount(id, bindInfo.stock_account, initial_password);
+                fundsAccounts.Add(newFundAccount);
                 await MyDbContext.SaveChangesAsync();
 
                 return Ok(newFundAccount);
@@ -370,5 +383,81 @@ namespace IdentityServerofStockTradingSystem.Controllers
             throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
         }
 
+        [HttpPost("destroy")]
+        public async Task<IActionResult> DeleteAccount([FromBody] DeleteInfo deleteStockInfo)
+        {
+            var name = deleteStockInfo.AdminName;
+            var password = deleteStockInfo.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                var thisAccount = await (from a in MyDbContext.SecuritiesAccounts where a.Id.Equals(deleteStockInfo.Id) select a).FirstOrDefaultAsync();
+                if (thisAccount == null)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is not exist");
+                }
+                else
+                {
+                    // check if the securities account can be deleted;
+                    var fundsAccounts = MyDbContext.FundAccounts;
+                    var thisFundAccount = await (from f in fundsAccounts where f.AccountId.Equals(deleteStockInfo.Id) select f).FirstOrDefaultAsync();
+                    if (thisFundAccount != null)
+                    {
+                        throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is still binded with a fund account");
+                    }
+                    else
+                    {
+                        var holders = MyDbContext.Holders;
+                        var stockOfThisAccount = await (from s in holders where s.AccountId.Equals(deleteStockInfo.Id) select s).ToArrayAsync();
+                        if (stockOfThisAccount.Length != 0)
+                        {
+                            throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is still holding some stocks");
+                        }
+
+                        MyDbContext.SecuritiesAccounts.Remove(thisAccount);
+                        await MyDbContext.SaveChangesAsync();
+
+                        return Ok("delete success");
+                    }
+                }               
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
+
+        [HttpPost("destroyfund")]
+        public async Task<IActionResult> DeleteFundAccount([FromBody] DeleteInfo deleteStockInfo)
+        {
+            var name = deleteStockInfo.AdminName;
+            var password = deleteStockInfo.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                var fundsAccounts = MyDbContext.FundAccounts;
+                var thisFundAccount = await (from f in fundsAccounts where f.Id.Equals(deleteStockInfo.Id) select f).FirstOrDefaultAsync();
+                if (thisFundAccount == null)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "The fund account is not exist");
+                }
+                if (thisFundAccount.BalanceUnAvailable != 0 || thisFundAccount.BalanceAvailable != 0)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "The fund account still has balance");
+                }
+                MyDbContext.FundAccounts.Remove(thisFundAccount);
+                await MyDbContext.SaveChangesAsync();
+
+                return Ok("delete success");
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
     }
 }
