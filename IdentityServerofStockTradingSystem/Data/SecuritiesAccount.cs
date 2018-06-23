@@ -16,7 +16,7 @@ namespace IdentityServerofStockTradingSystem.Data
         {
             Id = id;
             PersonId = person_id;
-            AccountType = account_type;
+            AccountType = account_type[0];
             AccountStatus = "normal";
         }
 
