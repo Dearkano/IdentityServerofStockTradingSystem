@@ -114,8 +114,18 @@ namespace IdentityServerofStockTradingSystem.Controllers
         [HttpGet("{accountId}")]
         public async Task<StockInfo[]> GetStock(string accountId)
         {
+            var token = Request.Headers["Authorization"];
+            TResponse response;
+            try
+            {
+                response = await Utility.GetIdentity(token);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
+            }
             var holders = MyDbContext.Holders;
-            var data = await (from a in holders where accountId == a.AccountId select new StockInfo { StockCode = a.StockCode, SharesNum = a.SharesNum, AverageCost = a.AverageCost}).ToArrayAsync();
+            var data = await (from a in holders where response.Account_id == a.AccountId select new StockInfo { StockCode = a.StockCode, SharesNum = a.SharesNum, AverageCost = a.AverageCost}).ToArrayAsync();
             return data;
         }
 
