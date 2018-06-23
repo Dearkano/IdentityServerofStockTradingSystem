@@ -133,7 +133,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> FreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string stockId = freezeStockInfo.stock_id;
+            string stockId = freezeStockInfo.stock_code;
             int value;
             try
             {
@@ -143,7 +143,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(stockId) select i).FirstOrDefaultAsync();
             if(stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
@@ -167,7 +167,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> UnFreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string stockId = freezeStockInfo.stock_id;
+            string stockId = freezeStockInfo.stock_code;
             int value;
             try
             {
@@ -177,7 +177,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(stockId) select i).FirstOrDefaultAsync();
             if (stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");

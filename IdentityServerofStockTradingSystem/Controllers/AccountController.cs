@@ -210,6 +210,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "unexpected input");
             }
         }
+
         //查询账户信息
         [HttpGet("select")]
         public async Task<TResponse> GetAccount(string Id)
