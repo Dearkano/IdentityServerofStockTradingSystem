@@ -211,8 +211,8 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
         }
         //查询账户信息
-        [HttpGet("{Id}")]
-        public async Task<TResponse> GetAccount(string Id)
+        [HttpGet("select")]
+        public async Task<TResponse> GetAccount()
         {
             var token = Request.Headers["Authorization"];
             TResponse response;
