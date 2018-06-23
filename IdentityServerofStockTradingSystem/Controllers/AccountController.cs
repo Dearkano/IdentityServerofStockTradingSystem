@@ -234,10 +234,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                  where i.Id.Equals(vip.accountId)
                                  select i).FirstOrDefaultAsync();
-            int cost;
+            decimal cost;
             try
             {
-                cost = int.Parse(vip.cost.ToString());
+                cost = decimal.Parse(vip.cost.ToString());
             }
             catch
             {
