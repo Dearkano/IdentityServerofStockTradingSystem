@@ -81,6 +81,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public string accountId;
     }
 
+    public class DeleteStockInfo
+    {
+        [Required]
+        public string AdminName { get; set; }
+        [Required]
+        public string AdminPassword { get; set; }
+        [Required]
+        public string stock_account { get; set; }
+    }
 
     [Route("api/account")]
     public class AdminController:Controller
@@ -370,5 +379,37 @@ namespace IdentityServerofStockTradingSystem.Controllers
             throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
         }
 
+        [HttpPost("destroy")]
+        public async Task<IActionResult> DeleteAccount([FromBody] DeleteStockInfo deleteStockInfo)
+        {
+            var name = deleteStockInfo.AdminName;
+            var password = deleteStockInfo.AdminPassword;
+            var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
+            if (thisUser.Length == 0)
+            {
+                throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+            }
+            var storedPassword = thisUser[0].Password;
+            if (password.Equals(storedPassword))
+            {
+                var thisAccount = await (from a in MyDbContext.SecuritiesAccounts where a.Id.Equals(deleteStockInfo.stock_account) select a).FirstOrDefaultAsync();
+                if (thisAccount == null)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is not exist");
+                }
+                // check if the securities account can be deleted;
+                var fundsAccounts = MyDbContext.FundAccounts;
+                var thisFundAccount = await (from f in fundsAccounts where f.Id.Equals(deleteStockInfo.stock_account) select f).FirstOrDefaultAsync();
+                if (thisFundAccount != null)
+                {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "The securities account is still binded with a fund account");
+                }
+                MyDbContext.SecuritiesAccounts.Remove(thisAccount);
+                await MyDbContext.SaveChangesAsync();
+
+                return Ok("delete success");
+            }
+            throw new ActionResultException(HttpStatusCode.Unauthorized, "no right");
+        }
     }
 }
