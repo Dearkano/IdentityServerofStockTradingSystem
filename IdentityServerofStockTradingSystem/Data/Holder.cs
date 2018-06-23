@@ -11,6 +11,9 @@ namespace IdentityServerofStockTradingSystem.Data
     public class Holder
     {
         [Key]
+        [Column("id")]
+        public string Id { get; set; }
+
         [Column("account_id")]
         public string AccountId { get; set; }
 
