@@ -133,9 +133,17 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> FreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string code = freezeStockInfo.stock_id;
-            int value = int.Parse(freezeStockInfo.value);
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(code) select i).FirstOrDefaultAsync();
+            string stockId = freezeStockInfo.stock_id;
+            int value;
+            try
+            {
+                value = int.Parse(freezeStockInfo.value);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
+            }
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
             if(stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
@@ -159,9 +167,17 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> UnFreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string code = freezeStockInfo.stock_id;
-            int value = int.Parse(freezeStockInfo.value);
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(code) select i).FirstOrDefaultAsync();
+            string stockId = freezeStockInfo.stock_id;
+            int value;
+            try
+            {
+                value = int.Parse(freezeStockInfo.value);
+            }
+            catch
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
+            }
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
             if (stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
