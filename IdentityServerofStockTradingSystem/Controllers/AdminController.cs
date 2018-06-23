@@ -101,21 +101,21 @@ namespace IdentityServerofStockTradingSystem.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<string> Post([FromBody]AdminInfo adminInfo)
+        public async Task<IActionResult> Post([FromBody]AdminInfo adminInfo)
         {
             var name = adminInfo.AdminName;
             var password = adminInfo.AdminPassword;
             var thisUser = await (from u in MyDbContext.Administrators where u.Name.Equals(name) select u).ToArrayAsync();
             if (thisUser.Length == 0)
             {
-                return "user doesn't exist";
+                throw new ActionResultException(HttpStatusCode.BadRequest, "Wrong name");
             }
             var storedPassword = thisUser[0].Password;
             if (password.Equals(storedPassword))
             {
-                return "login success";
+                return Ok("login success");
             }
-            return "password error";
+            throw new ActionResultException(HttpStatusCode.BadRequest, "Wrong password");
         }
 
 
