@@ -111,7 +111,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         }
 
 
-        [HttpGet("{accountId}")]
+        [HttpGet("select")]
         public async Task<StockInfo[]> GetStock(string accountId)
         {
             var token = Request.Headers["Authorization"];
