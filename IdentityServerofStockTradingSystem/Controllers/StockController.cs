@@ -133,7 +133,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> FreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string stockId = freezeStockInfo.stock_code;
+            string stockId = freezeStockInfo.stock_id;
             int value;
             try
             {
@@ -167,7 +167,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult> UnFreezeStock([FromBody] FreezeStockInfo freezeStockInfo)
         {
             string account = freezeStockInfo.stock_account;
-            string stockId = freezeStockInfo.stock_code;
+            string stockId = freezeStockInfo.stock_id;
             int value;
             try
             {
