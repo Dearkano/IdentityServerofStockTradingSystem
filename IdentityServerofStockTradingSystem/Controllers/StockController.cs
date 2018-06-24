@@ -33,10 +33,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var holders = MyDbContext.Holders;
             var fundAccounts = MyDbContext.FundAccounts;
             //linq 字符串 异步
-            var FundAccount = await (from i in fundAccounts where i.AccountId.Equals(message.UserId) select i).FirstOrDefaultAsync();
+            var FundAccount = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(message.UserId) select i).FirstOrDefaultAsync();
             var holder = await (from i in holders where (i.AccountId.Equals(message.UserId) && i.StockCode.Equals(message.StockCode)) select i).FirstOrDefaultAsync();
 
-            if (fundAccounts != null)
+            if (FundAccount != null)
             {
                 //买股票
                 if (message.Type == "buy")
