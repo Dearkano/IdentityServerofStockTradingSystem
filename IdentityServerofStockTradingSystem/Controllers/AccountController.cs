@@ -272,7 +272,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             }
             try
             {
-                accInfo.AccountType = "n";
+                accInfo.AccountType = "g";
                 funInfo.BalanceAvailable -= cost;
                 MyDbContext.SecuritiesAccounts.Update(accInfo);
                 MyDbContext.FundAccounts.Update(funInfo);
