@@ -189,6 +189,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             decimal value = decimal.Parse(updateValueInfo.value); // 转换为小数
             decimal nowBalance = funInfo.BalanceAvailable;
             string type = updateValueInfo.type;
+            if(value < 0)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "negative value");
+            }
             if(type == "recharge")
             {
                 funInfo.BalanceAvailable += value;
