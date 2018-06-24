@@ -22,7 +22,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
    
     public class UpdateValueInfo
     {
-        public string accountId; // 账户id
+        public string funId; // 资金账户id
         public string type;  // recharge | withdraw
         public string value; // 取出/存入
     }
@@ -166,13 +166,14 @@ namespace IdentityServerofStockTradingSystem.Controllers
         public async Task<IActionResult>UpdateValue([FromBody] UpdateValueInfo updateValueInfo)
         {
             
-            string accountId = updateValueInfo.accountId; // 获取accountId
+            string funId = updateValueInfo.funId; // 获取funId
             var funInfo = await (from i in MyDbContext.FundAccounts 
-                        where i.AccountId.Equals(accountId) select i).FirstOrDefaultAsync();
+                        where i.Id.Equals(funId) select i).FirstOrDefaultAsync();
             if(funInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
             }
+            string accountId = funInfo.AccountId;
             // 检测账户是否处于冻结状态
             var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                  where i.Id.Equals(accountId)
