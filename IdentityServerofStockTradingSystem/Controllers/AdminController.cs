@@ -305,16 +305,28 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                      where i.Id.Equals(accountId)
                                      select i).FirstOrDefaultAsync();
+                 if (accInfo == null)
+                 {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such person or account");
+                 }
                 // 资金表
                 var funInfo = await (from i in MyDbContext.FundAccounts
                                      where i.AccountId.Equals(accountId)
                                      select i).FirstOrDefaultAsync();
+                 if (funInfo == null)
+                 {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such person or account");
+                 }
                 string funId = funInfo.Id;
                 string personId = accInfo.PersonId;
                 // 个人信息表
                 var perInfo = await (from i in MyDbContext.People
                                      where i.PersonId.Equals(personId)
                                      select i).FirstOrDefaultAsync();
+                 if (perInfo == null)
+                 {
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such person or account");
+                 }
                 // 理论上只能修改account_type和person表下的东西
                 string item = updateInfo.item; // 取出要修改的列名
                 string afterInfo = updateInfo.afterInfo; // 取出修改后值的字符串状态
@@ -324,10 +336,6 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 }
                 // 修改账号状态
                 // 获得三个表的引用
-                if (funInfo == null || accInfo == null || perInfo == null)
-                {
-                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such person or account");
-                }
                 // 如果修改的是账户类型
                 if (item == "account_type")
                 {

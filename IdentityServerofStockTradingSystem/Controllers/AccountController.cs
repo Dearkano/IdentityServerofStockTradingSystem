@@ -177,6 +177,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                  where i.Id.Equals(accountId)
                                  select i).FirstOrDefaultAsync();
+            if(accInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+            }
             if(accInfo.AccountStatus == "a") // 挂失/冻结状态
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
@@ -235,6 +239,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var accInfo = await (from i in MyDbContext.SecuritiesAccounts
                                  where i.Id.Equals(vip.accountId)
                                  select i).FirstOrDefaultAsync();
+            if(accInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
+            }
             decimal cost;
             try
             {
@@ -244,17 +252,13 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
-            if(accInfo == null)
-            {
-                throw new ActionResultException(HttpStatusCode.BadRequest, "no such account");
-            }
             if(accInfo.AccountStatus == "a")
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "account forzen");
             }
             var funInfo = await (from i in MyDbContext.FundAccounts 
                         where i.AccountId.Equals(vip.accountId) select i).FirstOrDefaultAsync();
-            if(accInfo == null)
+            if(funInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such fund account");
             }
@@ -298,6 +302,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             var funInfo = await (from i in MyDbContext.FundAccounts
                                  where i.AccountId.Equals(operatingAccount)
                                  select i).FirstOrDefaultAsync();
+            if(funInfo == null)
+            {
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such fund account");
+            }
             string oldPassword = funInfo.Password;
             string providePassword = newPassword.old_password;
             if(oldPassword == providePassword)
