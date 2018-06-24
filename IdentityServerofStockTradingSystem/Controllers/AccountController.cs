@@ -275,6 +275,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 accInfo.AccountType = "g";
                 funInfo.BalanceAvailable -= cost;
                 MyDbContext.SecuritiesAccounts.Update(accInfo);
+                await MyDbContext.SaveChangesAsync();
                 MyDbContext.FundAccounts.Update(funInfo);
                 await MyDbContext.SaveChangesAsync();
                 return Ok();
