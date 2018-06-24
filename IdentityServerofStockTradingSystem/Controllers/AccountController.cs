@@ -72,14 +72,14 @@ namespace IdentityServerofStockTradingSystem.Controllers
         //http路由 这里是 /api/account/account
         //如果有参数  可以是 [HttpGet("account/{id}")] 然后Get(int id)取参数
         [HttpGet("account")]
-        public async Task<Account[]> Get()
+        public async Task<Person[]> Get()
         {
             //获取数据库的表
             var accounts = MyDbContext.Accounts;
             //linq 字符串 异步
             //翻译成sql 差不多就是 select * from accounts
             //返回的是数组
-            var data = await (from account in accounts select account).ToArrayAsync();
+            var data = await (from account in MyDbContext.People select account).ToArrayAsync();
             return data;
         }
 

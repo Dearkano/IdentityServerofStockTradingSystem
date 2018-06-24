@@ -143,7 +143,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(stockId) select i).FirstOrDefaultAsync();
             if(stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
@@ -177,7 +177,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
-            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.Id.Equals(stockId) select i).FirstOrDefaultAsync();
+            var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(stockId) select i).FirstOrDefaultAsync();
             if (stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
