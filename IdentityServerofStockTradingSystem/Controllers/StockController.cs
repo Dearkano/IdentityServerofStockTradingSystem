@@ -35,78 +35,76 @@ namespace IdentityServerofStockTradingSystem.Controllers
             //linq 字符串 异步
             var FundAccount = await (from i in MyDbContext.FundAccounts where i.AccountId.Equals(message.UserId) select i).FirstOrDefaultAsync();
             var holder = await (from i in holders where (i.AccountId.Equals(message.UserId) && i.StockCode.Equals(message.StockCode)) select i).FirstOrDefaultAsync();
-
-            if (FundAccount != null)
+            if (FundAccount == null)
+                throw new ActionResultException(HttpStatusCode.BadRequest, "this id doesn't exist");
+            if (FundAccount.AccountStatus == "a")
+                throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
+            //买股票
+            if (message.Type == "buy")
             {
-                //买股票
-                if (message.Type == "buy")
+                if (FundAccount.BalanceAvailable < message.Price * message.Value)
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "the balance is not enough");
+                else
                 {
-                    if (FundAccount.BalanceAvailable < message.Price * message.Value)
-                        throw new ActionResultException(HttpStatusCode.BadRequest, "the balance is not enough");
-                    else
+                    FundAccount.BalanceAvailable -= message.Price * message.Value;
+                    fundAccounts.Update(FundAccount);
+                    await MyDbContext.SaveChangesAsync();
+                    if (holder != null)
                     {
-                        FundAccount.BalanceAvailable -= message.Price * message.Value;
-                        fundAccounts.Update(FundAccount);
+                        decimal sum = holder.AverageCost * (holder.SharesNum + holder.UnavailableSharesNum) + message.Price * message.Value;
+                        holder.SharesNum += message.Value;
+                        holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
+                        holders.Update(holder);
                         await MyDbContext.SaveChangesAsync();
-                        if (holder != null)
-                        {
-                            decimal sum = holder.AverageCost * (holder.SharesNum + holder.UnavailableSharesNum) + message.Price * message.Value;
-                            holder.SharesNum += message.Value;
-                            holder.AverageCost = sum / (holder.SharesNum + holder.UnavailableSharesNum);
-                            holders.Update(holder);
-                            await MyDbContext.SaveChangesAsync();
-                            return Ok();
+                        return Ok();
 
-                        }
-                        else
-                        {
-
-                            Holder newHolder = new Holder
-                            {
-                                Id = message.UserId + message.StockCode,
-                                AccountId = message.UserId,
-                                StockCode = message.StockCode,
-                                SharesNum = message.Value,
-                                UnavailableSharesNum = 0,
-                                AverageCost = message.Price
-                              
-                            };
-                            await holders.AddAsync(newHolder);
-                            await MyDbContext.SaveChangesAsync();
-                            return Ok();
-                        }
                     }
-                }
-                //卖股票
-                else if (message.Type == "sell")
-                {
-                    if (holder == null || holder.SharesNum < message.Value)
-                        throw new ActionResultException(HttpStatusCode.BadRequest, "the amout of stock is not enough");
                     else
                     {
-                        FundAccount.BalanceAvailable += message.Price * message.Value;
-                        fundAccounts.Update(FundAccount);
-                        await MyDbContext.SaveChangesAsync();
 
-
-                        if (holder.SharesNum == message.Value && holder.UnavailableSharesNum == 0)
-                            holders.Remove(holder);
-                        else
+                        Holder newHolder = new Holder
                         {
-                            holder.SharesNum -= message.Value;
-                            holders.Update(holder);
-                        }
+                            Id = message.UserId + message.StockCode,
+                            AccountId = message.UserId,
+                            StockCode = message.StockCode,
+                            SharesNum = message.Value,
+                            UnavailableSharesNum = 0,
+                            AverageCost = message.Price
 
+                        };
+                        await holders.AddAsync(newHolder);
                         await MyDbContext.SaveChangesAsync();
                         return Ok();
                     }
-
                 }
+            }
+            //卖股票
+            else if (message.Type == "sell")
+            {
+                if (holder == null || holder.SharesNum < message.Value)
+                    throw new ActionResultException(HttpStatusCode.BadRequest, "the amout of stock is not enough");
                 else
-                    throw new ActionResultException(HttpStatusCode.BadRequest, "no such operation");
+                {
+                    FundAccount.BalanceAvailable += message.Price * message.Value;
+                    fundAccounts.Update(FundAccount);
+                    await MyDbContext.SaveChangesAsync();
+
+
+                    if (holder.SharesNum == message.Value && holder.UnavailableSharesNum == 0)
+                        holders.Remove(holder);
+                    else
+                    {
+                        holder.SharesNum -= message.Value;
+                        holders.Update(holder);
+                    }
+
+                    await MyDbContext.SaveChangesAsync();
+                    return Ok();
+                }
+
             }
             else
-                throw new ActionResultException(HttpStatusCode.BadRequest, "this id doesn't exist");
+                throw new ActionResultException(HttpStatusCode.BadRequest, "no such operation");
 
         }
 
