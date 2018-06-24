@@ -186,9 +186,10 @@ namespace IdentityServerofStockTradingSystem.Controllers
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
             }
+            decimal value;
             try
             {
-                decimal value = decimal.Parse(updateValueInfo.value); // 转换为小数
+                 value = decimal.Parse(updateValueInfo.value); // 转换为小数
             }
             catch
             {
