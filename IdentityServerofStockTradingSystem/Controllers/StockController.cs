@@ -39,6 +39,8 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "this id doesn't exist");
             if (FundAccount.AccountStatus == "a")
                 throw new ActionResultException(HttpStatusCode.BadRequest, "account frozen");
+            if (message.Value <= 0 || message.Price <= 0)
+                throw new ActionResultException(HttpStatusCode.BadRequest, "negative value or price");
             //买股票
             if (message.Type == "buy")
             {
