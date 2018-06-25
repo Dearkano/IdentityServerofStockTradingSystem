@@ -19,7 +19,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
         /// 建立数据库连接 构造方法
         /// </summary>
         /// <param name="DbContext"></param>
-        public  StockController(MyDbContext DbContext)
+        public StockController(MyDbContext DbContext)
         {
             MyDbContext = DbContext;
 
@@ -42,11 +42,11 @@ namespace IdentityServerofStockTradingSystem.Controllers
             //买股票
             if (message.Type == "buy")
             {
-                if (FundAccount.BalanceAvailable < message.Price * message.Value)
+                if (FundAccount.BalanceUnAvailable < message.Price * message.Value)
                     throw new ActionResultException(HttpStatusCode.BadRequest, "the balance is not enough");
                 else
                 {
-                    FundAccount.BalanceAvailable -= message.Price * message.Value;
+                    FundAccount.BalanceUnAvailable -= message.Price * message.Value;
                     fundAccounts.Update(FundAccount);
                     await MyDbContext.SaveChangesAsync();
                     if (holder != null)
@@ -72,7 +72,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                             AverageCost = message.Price
 
                         };
-                        await holders.AddAsync(newHolder);
+                        holders.Add(newHolder);
                         await MyDbContext.SaveChangesAsync();
                         return Ok();
                     }
@@ -87,16 +87,15 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 {
                     FundAccount.BalanceAvailable += message.Price * message.Value;
                     fundAccounts.Update(FundAccount);
+
                     await MyDbContext.SaveChangesAsync();
+                    holder.UnavailableSharesNum -= message.Value;
 
-
-                    if (holder.SharesNum == message.Value && holder.UnavailableSharesNum == 0)
+                    if (holder.SharesNum == 0 && holder.UnavailableSharesNum == 0)
                         holders.Remove(holder);
                     else
-                    {
-                        holder.SharesNum -= message.Value;
                         holders.Update(holder);
-                    }
+
 
                     await MyDbContext.SaveChangesAsync();
                     return Ok();
@@ -123,7 +122,7 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid token");
             }
             var holders = MyDbContext.Holders;
-            var data = await (from a in holders where response.Account_id == a.AccountId select new StockInfo { StockCode = a.StockCode, SharesNum = a.SharesNum, AverageCost = a.AverageCost}).ToArrayAsync();
+            var data = await (from a in holders where response.Account_id == a.AccountId select new StockInfo { StockCode = a.StockCode, SharesNum = a.SharesNum, AverageCost = a.AverageCost }).ToArrayAsync();
             return data;
         }
 
@@ -142,11 +141,11 @@ namespace IdentityServerofStockTradingSystem.Controllers
                 throw new ActionResultException(HttpStatusCode.BadRequest, "invalid input");
             }
             var stockInfo = await (from i in MyDbContext.Holders where i.AccountId.Equals(account) && i.StockCode.Equals(stockId) select i).FirstOrDefaultAsync();
-            if(stockInfo == null)
+            if (stockInfo == null)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "no such account or stock");
             }
-            if(value > stockInfo.SharesNum)
+            if (value > stockInfo.SharesNum)
             {
                 throw new ActionResultException(HttpStatusCode.BadRequest, "frozen value out of range");
             }
